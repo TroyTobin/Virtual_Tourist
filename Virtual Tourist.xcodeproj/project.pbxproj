@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		5391559F1B59B788007CC79C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5391559E1B59B788007CC79C /* AppDelegate.swift */; };
 		539155A21B59B788007CC79C /* Virtual_Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 539155A01B59B788007CC79C /* Virtual_Tourist.xcdatamodeld */; };
-		539155A41B59B788007CC79C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539155A31B59B788007CC79C /* ViewController.swift */; };
+		539155A41B59B788007CC79C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539155A31B59B788007CC79C /* MapViewController.swift */; };
 		539155A71B59B788007CC79C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 539155A51B59B788007CC79C /* Main.storyboard */; };
 		539155A91B59B788007CC79C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 539155A81B59B788007CC79C /* Images.xcassets */; };
 		539155AC1B59B788007CC79C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 539155AA1B59B788007CC79C /* LaunchScreen.xib */; };
 		539155B81B59B788007CC79C /* Virtual_TouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539155B71B59B788007CC79C /* Virtual_TouristTests.swift */; };
+		539155C21B59BB8B007CC79C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 539155C11B59BB8B007CC79C /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,13 +32,14 @@
 		5391559D1B59B788007CC79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5391559E1B59B788007CC79C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		539155A11B59B788007CC79C /* Virtual_Tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Virtual_Tourist.xcdatamodel; sourceTree = "<group>"; };
-		539155A31B59B788007CC79C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		539155A31B59B788007CC79C /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		539155A61B59B788007CC79C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		539155A81B59B788007CC79C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		539155AB1B59B788007CC79C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		539155B11B59B788007CC79C /* Virtual TouristTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Virtual TouristTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		539155B61B59B788007CC79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		539155B71B59B788007CC79C /* Virtual_TouristTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Virtual_TouristTests.swift; sourceTree = "<group>"; };
+		539155C11B59BB8B007CC79C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				539155C21B59BB8B007CC79C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +64,7 @@
 		539155901B59B787007CC79C = {
 			isa = PBXGroup;
 			children = (
+				539155C11B59BB8B007CC79C /* MapKit.framework */,
 				5391559B1B59B788007CC79C /* Virtual Tourist */,
 				539155B41B59B788007CC79C /* Virtual TouristTests */,
 				5391559A1B59B788007CC79C /* Products */,
@@ -80,7 +84,7 @@
 			isa = PBXGroup;
 			children = (
 				5391559E1B59B788007CC79C /* AppDelegate.swift */,
-				539155A31B59B788007CC79C /* ViewController.swift */,
+				539155A31B59B788007CC79C /* MapViewController.swift */,
 				539155A51B59B788007CC79C /* Main.storyboard */,
 				539155A81B59B788007CC79C /* Images.xcassets */,
 				539155AA1B59B788007CC79C /* LaunchScreen.xib */,
@@ -215,7 +219,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				539155A41B59B788007CC79C /* ViewController.swift in Sources */,
+				539155A41B59B788007CC79C /* MapViewController.swift in Sources */,
 				539155A21B59B788007CC79C /* Virtual_Tourist.xcdatamodeld in Sources */,
 				5391559F1B59B788007CC79C /* AppDelegate.swift in Sources */,
 			);
