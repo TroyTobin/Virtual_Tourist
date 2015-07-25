@@ -10,17 +10,42 @@ import UIKit
 import MapKit
 
 class MapViewController: UIViewController {
-
+  
+  @IBOutlet weak var MapView: MKMapView!
+  var tapRecognizer: UITapGestureRecognizer?
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
+
+    // Add a tap recogniser for the map view
+    // This is where new pins will be added
+    tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+    tapRecognizer?.numberOfTapsRequired = 1
+    addKeyboardDismissRecognizer()
   }
-
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
+  
+  override func viewWillDisappear(animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    self.removeKeyboardDismissRecognizer()
   }
-
-
+  
+  /// add tap recogniser to the map view
+  func addKeyboardDismissRecognizer() {
+    self.view.addGestureRecognizer(tapRecognizer!)
+  }
+  
+  /// remove tap recogniser from the map view
+  func removeKeyboardDismissRecognizer() {
+    self.view.removeGestureRecognizer(tapRecognizer!)
+  }
+  
+  
+  /// The map has been tapped, so add a new annoation if one not already there
+  func handleSingleTap(recognizer: UITapGestureRecognizer) {
+    var pointTapped:CGPoint = recognizer.locationInView(self.MapView)
+    var locationTapped:CLLocationCoordinate2D = self.MapView.convertPoint(pointTapped, toCoordinateFromView: self.MapView)
+    println("\(locationTapped.latitude), \(locationTapped.longitude)")
+  }
 }
 

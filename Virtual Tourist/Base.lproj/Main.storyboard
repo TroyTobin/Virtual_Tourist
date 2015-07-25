@@ -52,6 +52,9 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="MapView" destination="6ut-JT-Unv" id="VH0-pK-hqU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
