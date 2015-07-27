@@ -45,7 +45,17 @@ class MapViewController: UIViewController {
   func handleSingleTap(recognizer: UITapGestureRecognizer) {
     var pointTapped:CGPoint = recognizer.locationInView(self.MapView)
     var locationTapped:CLLocationCoordinate2D = self.MapView.convertPoint(pointTapped, toCoordinateFromView: self.MapView)
-    println("\(locationTapped.latitude), \(locationTapped.longitude)")
+    
+    var newAnnotation = MKPointAnnotation()
+    
+    newAnnotation.coordinate = CLLocationCoordinate2D(latitude: locationTapped.latitude, longitude: locationTapped.longitude)
+    
+    dispatch_async(dispatch_get_main_queue(), {
+  
+      /// Add all of the annotations to the view
+      self.MapView.addAnnotation(newAnnotation)
+    })
+  
   }
 }
 
