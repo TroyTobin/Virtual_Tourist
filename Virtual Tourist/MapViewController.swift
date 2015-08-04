@@ -2,7 +2,7 @@
 //  MapViewController.swift
 //  Virtual Tourist
 //
-//  Created by Troy Tobin on 18/07/2015.
+//  Created by Troy Tobin on 18 July 2015.
 //  Copyright (c) 2015 ttobin. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class MapViewController: UIViewController, NSFetchedResultsControllerDelegate {
+class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, MKMapViewDelegate {
   
   @IBOutlet weak var MapView: MKMapView!
   var tapRecognizer: UITapGestureRecognizer?
@@ -44,6 +44,9 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate {
     tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
     tapRecognizer?.numberOfTapsRequired = 1
     addKeyboardDismissRecognizer()
+    
+    /// This class is the Mapview delegate
+    self.MapView.delegate = self
     
     /// This class is the FetchedResultsController delegate
     fetchedResultsController.delegate = self
@@ -89,6 +92,11 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate {
       /// Add all of the annotations to the view
       self.MapView.addAnnotation(newAnnotation)
     })
+    VTClient.sharedInstance().searchPhotosByLocation(pin.latitude as Double, longitude: pin.longitude as Double) { results, errorString in
+
+      println(results)
+      println(errorString)
+    }
   }
   
   /// The map has been tapped, so add a new annoation if one not already there
@@ -108,7 +116,11 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate {
     addPinToMap(pinToBeAdded)
     
     CoreDataStackManager.sharedInstance().saveContext()
-  
   }
+  
+  /// overwrite the annotation view so we can add an info button
+  ///func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    
+  ///}
 }
 
