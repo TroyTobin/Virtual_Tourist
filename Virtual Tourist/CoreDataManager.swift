@@ -118,7 +118,6 @@ class CoreDataStackManager {
     if let context = self.managedObjectContext {
       
       var error: NSError? = nil
-      println(context.hasChanges)
       if context.hasChanges && !context.save(&error) {
         NSLog("Unresolved error \(error), \(error!.userInfo)")
         abort()

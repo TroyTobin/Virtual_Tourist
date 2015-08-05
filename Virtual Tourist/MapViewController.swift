@@ -87,15 +87,35 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
     var newAnnotation = MKPointAnnotation()
     newAnnotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude as CLLocationDegrees, longitude: pin.longitude as CLLocationDegrees)
     
-    dispatch_async(dispatch_get_main_queue(), {
-      
-      /// Add all of the annotations to the view
-      self.MapView.addAnnotation(newAnnotation)
-    })
-    VTClient.sharedInstance().searchPhotosByLocation(pin.latitude as Double, longitude: pin.longitude as Double) { results, errorString in
+    var annotationPoint = MKMapPointForCoordinate(newAnnotation.coordinate)
 
-      println(results)
-      println(errorString)
+    /// divide up into a grid of 10 x 10
+    /// and only add a new pin if outside that area (otherwise the view will get too cluttered)
+    var gridWidth = MapView.visibleMapRect.size.width/10
+    var gridHeight = MapView.visibleMapRect.size.height/10
+    var origin = MKMapPoint(x: annotationPoint.x - gridWidth/2, y: annotationPoint.y - gridWidth/2)
+    var bounding = MKMapRect(origin: origin, size: MKMapSize(width: gridWidth, height: gridHeight))
+    
+    var inBounding = self.MapView.annotationsInMapRect(bounding)
+    var latitude = pin.latitude
+    var longitude = pin.longitude
+    if (inBounding.count == 0) {
+      dispatch_async(dispatch_get_main_queue(), {
+      
+        /// Add all of the annotations to the view
+        self.MapView.addAnnotation(newAnnotation)
+      })
+    }
+    else
+    {
+      /// Since there is a close annotation, use the first one in the array
+      /// as the reference point for fetching photos
+      var nearestAnnotation = inBounding.first as! MKPointAnnotation
+      latitude = nearestAnnotation.coordinate.latitude
+      longitude = nearestAnnotation.coordinate.longitude
+    }
+    
+    VTClient.sharedInstance().searchPhotosByLocation(latitude as Double, longitude: longitude as Double) { results, errorString in
     }
   }
   
@@ -117,10 +137,5 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
     
     CoreDataStackManager.sharedInstance().saveContext()
   }
-  
-  /// overwrite the annotation view so we can add an info button
-  ///func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
-    
-  ///}
 }
 
