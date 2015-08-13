@@ -11,6 +11,13 @@ import MapKit
 
 class PhotoMapViewController: UIViewController {
 
-  
-  
+  var focusPin: Pin!
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    println(focusPin)
+  }
+    
+  override func viewWillDisappear(animated: Bool) {
+    super.viewWillDisappear(animated)
+  }  
 }
