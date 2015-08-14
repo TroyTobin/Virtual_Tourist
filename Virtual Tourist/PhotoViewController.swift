@@ -41,13 +41,77 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     /// This class is the FetchedResultsController delegate
     fetchedResultsController.delegate = self
     
+    var goToFlickr = false
     /// Perform the first fetch of Pins to populate the map.
     var FetchResult = fetchedResultsController.performFetch(nil)
     if (FetchResult) {
       /// Only try to use the pins if the fetch was successfull
       println("fetched photos = \(FetchResult)")
       var photos = fetchedResultsController.fetchedObjects! as NSArray
-      println("photos = \(photos)")
+      
+      /// Check if we actually had any photos stored
+      if (photos.count == 0) {
+        goToFlickr = true
+      } else {
+        println("photos stored = \(photos)")
+      }
+    } else {
+      goToFlickr = true
+    }
+    
+    if (goToFlickr) {
+      /// Get photos from Flickr
+      
+      VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
+        if let errorString = errorString {
+          println("Error = \(errorString)")
+        } else {
+          if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
+          
+            if let totalPages = photosDictionary["pages"] as? Int {
+            
+              /* Flickr API - will only return up the 4000 images (100 per page * 40 page max) */
+              let pageLimit = min(totalPages, 40)
+              let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+              VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: randomPage) { results, errorString in
+                if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
+                  
+                  var totalPhotosVal = 0
+                  if let totalPhotos = photosDictionary["total"] as? String {
+                    totalPhotosVal = (totalPhotos as NSString).integerValue
+                  }
+                  
+                  /// we want to display 21 photos
+                  if totalPhotosVal > 0 {
+                    if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
+                      var total = 0
+                      while (total < 21 && total < totalPhotosVal) {
+                        let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+                        let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
+                      
+                        let photoTitle = photoDictionary["title"] as? String
+                        let imageUrlString = photoDictionary["url_m"] as? String
+                        let imageURL = NSURL(string: imageUrlString!)
+                        println("photo \(total)= \(imageURL)")
+                        total += 1
+                      }
+                    } else {
+                      println("Cant find key 'photo' in \(photosDictionary)")
+                    }
+                  } else {
+                  }
+                }
+
+              }
+            
+            } else {
+              println("Cant find key 'pages' in \(photosDictionary)")
+            }
+          } else {
+            println("Cant find key 'photos' in \(results)")
+          }
+        }
+      }
     }
   }
   

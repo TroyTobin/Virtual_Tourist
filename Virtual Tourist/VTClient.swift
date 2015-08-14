@@ -37,8 +37,8 @@ class VTClient: NSObject {
   }
   
   /// Search flickr
-  func searchPhotosByLocation(latitude: Double, longitude: Double, completionHandler: (results: AnyObject?, errorString: String?) -> Void) {
-    let flickrParameters = [
+  func searchPhotosByLocation(latitude: Double, longitude: Double, page: NSNumber?, completionHandler: (results: AnyObject?, errorString: String?) -> Void) {
+    var flickrParameters = [
       "api_key": VTClient.Constants.FlickrApiKey,
       "bbox": locationToBoundingBox(latitude, longitude: longitude),
       "safe_search": String(VTClient.FlickrParameters.SafeSearch.description),
@@ -46,6 +46,9 @@ class VTClient: NSObject {
       "format": VTClient.FlickrParameters.DataFormat,
       "nojsoncallback": String(VTClient.FlickrParameters.NoJSONCallback)
     ]
+    if let page = page {
+      flickrParameters["page"] = page.stringValue
+    }
     
     /// Create an escaped URL
     var parameters = VTNetLayer.escapeURLParameters(flickrParameters)
@@ -59,6 +62,7 @@ class VTClient: NSObject {
     }
   }
   
+    
   /// Return the client singleton
   class func sharedInstance() -> VTClient {
     struct Singleton {

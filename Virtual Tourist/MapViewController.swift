@@ -187,10 +187,6 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
       println(pressedPin)
       self.presentViewController(controller, animated: true, completion: nil)
     }
-    
-    //VTClient.sharedInstance().searchPhotosByLocation(latitude as Double, longitude: longitude as Double) { results, errorString
-    //      println(results)
-    //}
   }
   
   /// The map has been tapped, so add a new annoation if one not already there
