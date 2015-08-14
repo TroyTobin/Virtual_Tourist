@@ -13,11 +13,11 @@ import CoreData
 class Photo : NSManagedObject {
   
   struct Keys {
-    static let Id  = "Id"
+    static let id  = "id"
   }
   
   ///Set the Photo attributes to Core data attributes
-  @NSManaged var Id: String
+  @NSManaged var id: String
   @NSManaged var pin: Pin
   
   /// initialise the Core data
@@ -36,8 +36,8 @@ class Photo : NSManagedObject {
     // Init for Managed object - this will store the object
     super.init(entity: entity,insertIntoManagedObjectContext: context)
     
-    // Set the pins attributes
-    Id  = dictionary[Keys.Id] as! String
+    // Set the photos attributes
+    id  = dictionary[Keys.id] as! String
   }
 }
 

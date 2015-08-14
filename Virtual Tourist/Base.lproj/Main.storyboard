@@ -93,7 +93,7 @@
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wkn-J6-UEZ">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <connections>
-                                    <segue destination="5q2-fC-P0K" kind="embed" id="rfT-ak-dxL"/>
+                                    <segue destination="5q2-fC-P0K" kind="embed" identifier="showPhotos" id="rfT-ak-dxL"/>
                                 </connections>
                             </containerView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TV8-xb-Qss">
@@ -241,10 +241,10 @@
             </objects>
             <point key="canvasLocation" x="2907" y="162"/>
         </scene>
-        <!--View Controller-->
+        <!--Photo View Controller-->
         <scene sceneID="SrU-cx-f6a">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="5q2-fC-P0K" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="5q2-fC-P0K" customClass="PhotoViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="8O4-Lw-g4W"/>
                         <viewControllerLayoutGuide type="bottom" id="XZ6-PZ-efZ"/>
@@ -263,14 +263,50 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="slS-Bk-yiM">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="slS-Bk-yiM" customClass="PhotoViewCell" customModule="Virtual_Tourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qF3-6V-flq">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="qF3-6V-flq" firstAttribute="leading" secondItem="slS-Bk-yiM" secondAttribute="leadingMargin" constant="-8" id="EPH-dl-ZVf"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="qF3-6V-flq" secondAttribute="trailing" constant="-8" id="ntv-YH-pvv"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="qF3-6V-flq" secondAttribute="bottom" constant="-8" id="ryR-Cb-ime"/>
+                                            <constraint firstItem="qF3-6V-flq" firstAttribute="top" secondItem="slS-Bk-yiM" secondAttribute="topMargin" constant="-8" id="sQP-nZ-wuJ"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="qF3-6V-flq"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <exclude reference="EPH-dl-ZVf"/>
+                                                <exclude reference="ntv-YH-pvv"/>
+                                                <exclude reference="ryR-Cb-ime"/>
+                                                <exclude reference="sQP-nZ-wuJ"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="subviews">
+                                                <include reference="qF3-6V-flq"/>
+                                            </mask>
+                                            <mask key="constraints">
+                                                <include reference="EPH-dl-ZVf"/>
+                                                <include reference="ntv-YH-pvv"/>
+                                                <include reference="ryR-Cb-ime"/>
+                                                <include reference="sQP-nZ-wuJ"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <outlet property="imageView" destination="qF3-6V-flq" id="Auf-1W-1wj"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -306,6 +342,9 @@
                         </variation>
                     </view>
                     <toolbarItems/>
+                    <connections>
+                        <outlet property="CollectionView" destination="lDZ-DV-20b" id="6zM-pa-lmp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pkh-BQ-dYm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

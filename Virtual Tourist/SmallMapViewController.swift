@@ -18,8 +18,7 @@ class SmallMapViewController: UIViewController, MKMapViewDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    showPinLocation();
-
+    showPinLocation();    
   }
   
   override func viewWillDisappear(animated: Bool) {

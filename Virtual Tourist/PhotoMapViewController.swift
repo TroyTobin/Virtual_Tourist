@@ -34,6 +34,12 @@ class PhotoMapViewController: UIViewController {
       
       let pin = focusPin as Pin;
       smallMap.focusPin = pin;
+    } else if("showPhotos" == segue.identifier)
+      {
+        let photos:PhotoViewController = segue.destinationViewController as! PhotoViewController;
+        
+        let pin = focusPin as Pin;
+        photos.focusPin = pin;
     }
   }
   
