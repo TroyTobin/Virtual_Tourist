@@ -106,12 +106,12 @@
 				5391559E1B59B788007CC79C /* AppDelegate.swift */,
 				539155A31B59B788007CC79C /* MapViewController.swift */,
 				53858EB91B6CDF6C00291EDA /* PhotoMapViewController.swift */,
+				53708BC01B7E22BF00570D6C /* SmallMapViewController.swift */,
 				539155A51B59B788007CC79C /* Main.storyboard */,
 				539155A81B59B788007CC79C /* Images.xcassets */,
 				539155AA1B59B788007CC79C /* LaunchScreen.xib */,
 				539155A01B59B788007CC79C /* Virtual_Tourist.xcdatamodeld */,
 				5391559C1B59B788007CC79C /* Supporting Files */,
-				53708BC01B7E22BF00570D6C /* SmallMapViewController.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
