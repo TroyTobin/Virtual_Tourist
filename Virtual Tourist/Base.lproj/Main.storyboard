@@ -87,7 +87,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <segue destination="sGK-UH-kwc" kind="embed" id="4s9-iX-sc1"/>
+                                    <segue destination="sGK-UH-kwc" kind="embed" identifier="showMap" id="4s9-iX-sc1"/>
                                 </connections>
                             </containerView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wkn-J6-UEZ">
@@ -178,10 +178,10 @@
             </objects>
             <point key="canvasLocation" x="2128.5" y="386"/>
         </scene>
-        <!--View Controller-->
+        <!--Small Map View Controller-->
         <scene sceneID="vNV-dV-J3e">
             <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="sGK-UH-kwc" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="sGK-UH-kwc" customClass="SmallMapViewController" customModule="Virtual_Tourist" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jEa-6O-lBl"/>
                         <viewControllerLayoutGuide type="bottom" id="fT5-0G-5c5"/>
@@ -192,6 +192,12 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="wil-0M-xAH">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            </mapView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Fw4-mG-b1p">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="0.0" width="400" height="150"/>
+                                </variation>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -204,6 +210,7 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="wil-0M-xAH"/>
+                                <exclude reference="Fw4-mG-b1p"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="hc7-ND-8On"/>
@@ -215,6 +222,7 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="wil-0M-xAH"/>
+                                <include reference="Fw4-mG-b1p"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="hc7-ND-8On"/>
@@ -225,6 +233,9 @@
                         </variation>
                     </view>
                     <toolbarItems/>
+                    <connections>
+                        <outlet property="mapView" destination="Fw4-mG-b1p" id="5EX-WQ-JtL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O6j-Ka-MOl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

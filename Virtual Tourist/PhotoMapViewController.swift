@@ -11,13 +11,30 @@ import MapKit
 
 class PhotoMapViewController: UIViewController {
 
+  @IBOutlet weak var mapView: MKMapView!
   var focusPin: Pin!
   override func viewDidLoad() {
     super.viewDidLoad()
-    println(focusPin)
   }
-    
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+  }
+  
   override func viewWillDisappear(animated: Bool) {
     super.viewWillDisappear(animated)
-  }  
+  }
+  
+  /// About to segue, so set the recorded data on the play audio view controller
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
+  {
+    if("showMap" == segue.identifier)
+    {
+      let smallMap:SmallMapViewController = segue.destinationViewController as! SmallMapViewController;
+      
+      let pin = focusPin as Pin;
+      smallMap.focusPin = pin;
+    }
+  }
+  
 }

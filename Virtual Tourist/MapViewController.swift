@@ -175,7 +175,7 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
         
         for pin in pins {
           if (pin.latitude == pinLatitude && pin.longitude == pinLongitude) {
-            pressedPin = pin as? Pin
+            pressedPin = pin as! Pin
             break;
           }
         }
@@ -184,6 +184,7 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
       
       let controller = self.storyboard!.instantiateViewControllerWithIdentifier("PhotoMapView") as! PhotoMapViewController
       controller.focusPin = pressedPin
+      println(pressedPin)
       self.presentViewController(controller, animated: true, completion: nil)
     }
     

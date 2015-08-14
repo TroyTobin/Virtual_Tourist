@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53708BC11B7E22BF00570D6C /* SmallMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53708BC01B7E22BF00570D6C /* SmallMapViewController.swift */; };
 		53858EBA1B6CDF6C00291EDA /* PhotoMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53858EB91B6CDF6C00291EDA /* PhotoMapViewController.swift */; };
 		5391559F1B59B788007CC79C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5391559E1B59B788007CC79C /* AppDelegate.swift */; };
 		539155A21B59B788007CC79C /* Virtual_Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 539155A01B59B788007CC79C /* Virtual_Tourist.xcdatamodeld */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		53708BC01B7E22BF00570D6C /* SmallMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmallMapViewController.swift; sourceTree = "<group>"; };
 		53858EB91B6CDF6C00291EDA /* PhotoMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoMapViewController.swift; sourceTree = "<group>"; };
 		539155991B59B788007CC79C /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5391559D1B59B788007CC79C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				539155AA1B59B788007CC79C /* LaunchScreen.xib */,
 				539155A01B59B788007CC79C /* Virtual_Tourist.xcdatamodeld */,
 				5391559C1B59B788007CC79C /* Supporting Files */,
+				53708BC01B7E22BF00570D6C /* SmallMapViewController.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -247,6 +250,7 @@
 				53C218001B6CDAEE00D3547F /* VTConstants.swift in Sources */,
 				53C217FC1B6CD91600D3547F /* VTClient.swift in Sources */,
 				539155A41B59B788007CC79C /* MapViewController.swift in Sources */,
+				53708BC11B7E22BF00570D6C /* SmallMapViewController.swift in Sources */,
 				539155A21B59B788007CC79C /* Virtual_Tourist.xcdatamodeld in Sources */,
 				53C217F61B68E3EA00D3547F /* CoreDataManager.swift in Sources */,
 				5391559F1B59B788007CC79C /* AppDelegate.swift in Sources */,
