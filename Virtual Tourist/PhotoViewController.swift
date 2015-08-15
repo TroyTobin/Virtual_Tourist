@@ -53,7 +53,11 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       if (photos.count == 0) {
         goToFlickr = true
       } else {
-        println("photos stored = \(photos)")
+        for photo in photos {
+          let newPhoto = photo as! Photo
+          print("image id = \(newPhoto.id)")
+          print("image url = \(newPhoto.url)")
+        }
       }
     } else {
       goToFlickr = true
@@ -61,7 +65,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     
     if (goToFlickr) {
       /// Get photos from Flickr
-      
+      println("goToFlickr")
       VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
         if let errorString = errorString {
           println("Error = \(errorString)")
@@ -91,10 +95,23 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                       
                         let photoTitle = photoDictionary["title"] as? String
                         let imageUrlString = photoDictionary["url_m"] as? String
+                        let id = photoDictionary["id"] as? String
                         let imageURL = NSURL(string: imageUrlString!)
+                        let imageData = NSData(contentsOfURL: imageURL!)
+                        let image = UIImage(data: imageData!)
                         println("photo \(total)= \(imageURL)")
                         total += 1
+                        let dictionary: [String : AnyObject] = [
+                          Photo.Keys.id: id as! AnyObject,
+                          Photo.Keys.url: imageUrlString as! AnyObject,
+                          Photo.Keys.image: imageData as! AnyObject
+                        ]
+                        
+                        /// Now we create a new Person, using the shared Context
+                        let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
+                        photoAtPin.pin = self.focusPin
                       }
+                      CoreDataStackManager.sharedInstance().saveContext()
                     } else {
                       println("Cant find key 'photo' in \(photosDictionary)")
                     }

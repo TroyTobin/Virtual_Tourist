@@ -15,13 +15,13 @@ class Photo : NSManagedObject {
   struct Keys {
     static let id   = "id"
     static let url  = "url"
-    static let data = "data"
+    static let image = "image"
   }
   
   ///Set the Photo attributes to Core data attributes
   @NSManaged var id:  String
   @NSManaged var url:  String
-  @NSManaged var data: NSData
+  @NSManaged var image: NSData
   @NSManaged var pin:  Pin
   
   /// initialise the Core data
@@ -43,7 +43,7 @@ class Photo : NSManagedObject {
     // Set the photos attributes
     id   = dictionary[Keys.id]  as! String
     url  = dictionary[Keys.url]  as! String
-    data = dictionary[Keys.data] as! NSData
+    image = dictionary[Keys.image] as! NSData
   }
 }
 
