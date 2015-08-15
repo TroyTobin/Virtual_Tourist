@@ -12,6 +12,7 @@ import CoreData
 class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
   
   var focusPin: Pin!
+  var displayPhotos = [Photo]()
   @IBOutlet var CollectionView: UICollectionView!
   
   /// Managed object context
@@ -37,6 +38,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    displayPhotos.removeAll(keepCapacity: false)
     
     /// This class is the FetchedResultsController delegate
     fetchedResultsController.delegate = self
@@ -55,8 +57,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       } else {
         for photo in photos {
           let newPhoto = photo as! Photo
-          print("image id = \(newPhoto.id)")
-          print("image url = \(newPhoto.url)")
+          displayPhotos.append(newPhoto)
         }
       }
     } else {
@@ -110,6 +111,8 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                         /// Now we create a new Person, using the shared Context
                         let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
                         photoAtPin.pin = self.focusPin
+                        
+                        self.displayPhotos.append(photoAtPin)
                       }
                       CoreDataStackManager.sharedInstance().saveContext()
                     } else {
@@ -130,6 +133,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
         }
       }
     }
+    self.CollectionView.reloadData()
   }
   
   
@@ -150,7 +154,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   /// :param: collectionView The collection view controller
   /// :param: section The index into the collection view
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 0
+    return self.displayPhotos.count
   }
   
   /// Return the Photo for the desired index
@@ -160,7 +164,10 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let photoCell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoViewCell
     
-    // @TODO get the photo and set the image view for the cell
+    let newPhoto = self.displayPhotos[indexPath.row]
+    
+    /// Set the meme label and image
+    photoCell.imageView?.image = UIImage(data: newPhoto.image)
     
     return photoCell
   }
