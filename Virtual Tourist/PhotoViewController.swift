@@ -70,7 +70,6 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     
     if (goToFlickr) {
       /// Get photos from Flickr
-      println("goToFlickr")
       VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
         if let errorString = errorString {
           println("Error = \(errorString)")
@@ -89,12 +88,13 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                   if let totalPhotos = photosDictionary["total"] as? String {
                     totalPhotosVal = (totalPhotos as NSString).integerValue
                   }
-                  println("total Photos \(totalPhotosVal)")
+                  
                   /// we want to display 21 photos
                   if totalPhotosVal > 0 {
                     if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
                       var total = 0
-                      while (total < 21 && total < totalPhotosVal) {
+                    
+                      while (total < min(21, totalPhotosVal)) {
                         let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                         let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
                         
@@ -112,17 +112,20 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                           Photo.Keys.image: imageData as! AnyObject
                         ]
                         
-                        /// Now we create a new Person, using the shared Context
+                        /// Now we create a new Photo, using the shared Context
                         let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
                         photoAtPin.pin = self.focusPin
                         
                         self.displayPhotos.append(photoAtPin)
-                        //println(self.displayPhotos)
                       }
+                      
+                      // Downloaded all of the photos we need so okay to save now
                       CoreDataStackManager.sharedInstance().saveContext()
                       
-                      println("photo list here is \(self.displayPhotos)")
-                      self.CollectionView.reloadData()
+                      dispatch_async(dispatch_get_main_queue(), {
+                         // Since we have all the photos also reload the Collection View
+                         self.CollectionView.reloadData()
+                      })
                     } else {
                       println("Cant find key 'photo' in \(photosDictionary)")
                     }
@@ -141,8 +144,9 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
         }
       }
     } else {
-      println("photo list here is \(self.displayPhotos)")
-      self.CollectionView.reloadData()
+      dispatch_async(dispatch_get_main_queue(), {
+        self.CollectionView.reloadData()
+      })
     }
   }
   
