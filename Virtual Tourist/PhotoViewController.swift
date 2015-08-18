@@ -36,19 +36,23 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     
     }()
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    
     displayPhotos.removeAll(keepCapacity: false)
     
     /// This class is the FetchedResultsController delegate
     fetchedResultsController.delegate = self
+    
+    /// Set this class to be the delegate
+    self.CollectionView?.delegate = self
+    self.CollectionView?.dataSource = self
     
     var goToFlickr = false
     /// Perform the first fetch of Pins to populate the map.
     var FetchResult = fetchedResultsController.performFetch(nil)
     if (FetchResult) {
       /// Only try to use the pins if the fetch was successfull
-      println("fetched photos = \(FetchResult)")
       var photos = fetchedResultsController.fetchedObjects! as NSArray
       
       /// Check if we actually had any photos stored
@@ -72,9 +76,9 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
           println("Error = \(errorString)")
         } else {
           if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
-          
-            if let totalPages = photosDictionary["pages"] as? Int {
             
+            if let totalPages = photosDictionary["pages"] as? Int {
+              
               /* Flickr API - will only return up the 4000 images (100 per page * 40 page max) */
               let pageLimit = min(totalPages, 40)
               let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
@@ -85,7 +89,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                   if let totalPhotos = photosDictionary["total"] as? String {
                     totalPhotosVal = (totalPhotos as NSString).integerValue
                   }
-                  
+                  println("total Photos \(totalPhotosVal)")
                   /// we want to display 21 photos
                   if totalPhotosVal > 0 {
                     if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
@@ -93,7 +97,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                       while (total < 21 && total < totalPhotosVal) {
                         let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
                         let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
-                      
+                        
                         let photoTitle = photoDictionary["title"] as? String
                         let imageUrlString = photoDictionary["url_m"] as? String
                         let id = photoDictionary["id"] as? String
@@ -113,17 +117,21 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                         photoAtPin.pin = self.focusPin
                         
                         self.displayPhotos.append(photoAtPin)
+                        //println(self.displayPhotos)
                       }
                       CoreDataStackManager.sharedInstance().saveContext()
+                      
+                      println("photo list here is \(self.displayPhotos)")
+                      self.CollectionView.reloadData()
                     } else {
                       println("Cant find key 'photo' in \(photosDictionary)")
                     }
                   } else {
                   }
                 }
-
+                
               }
-            
+              
             } else {
               println("Cant find key 'pages' in \(photosDictionary)")
             }
@@ -132,21 +140,10 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
           }
         }
       }
+    } else {
+      println("photo list here is \(self.displayPhotos)")
+      self.CollectionView.reloadData()
     }
-    self.CollectionView.reloadData()
-  }
-  
-  
-  override func viewWillAppear(animated: Bool) {
-    super.viewWillAppear(animated)
-    
-    /// Set this class to be the delegate
-    self.CollectionView?.delegate = self
-    self.CollectionView?.dataSource = self
-    
-
-    /// Reload the memes in the collection view
-    self.CollectionView.reloadData()
   }
   
   /// Return the number of saved Meme images to show
