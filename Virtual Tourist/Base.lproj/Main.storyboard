@@ -270,42 +270,62 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qF3-6V-flq">
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qF3-6V-flq">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="v8L-Cn-ILJ">
+                                                    <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                                    <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="v8L-Cn-ILJ" firstAttribute="leading" secondItem="slS-Bk-yiM" secondAttribute="leadingMargin" constant="32" id="1HI-9n-oer"/>
                                             <constraint firstItem="qF3-6V-flq" firstAttribute="leading" secondItem="slS-Bk-yiM" secondAttribute="leadingMargin" constant="-8" id="EPH-dl-ZVf"/>
+                                            <constraint firstItem="v8L-Cn-ILJ" firstAttribute="top" secondItem="slS-Bk-yiM" secondAttribute="topMargin" constant="32" id="P1W-sl-xkK"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="v8L-Cn-ILJ" secondAttribute="bottom" constant="32" id="Pd3-wO-eda"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="qF3-6V-flq" secondAttribute="trailing" constant="-8" id="ntv-YH-pvv"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="v8L-Cn-ILJ" secondAttribute="trailing" constant="32" id="rs6-gZ-P77"/>
                                             <constraint firstAttribute="bottomMargin" secondItem="qF3-6V-flq" secondAttribute="bottom" constant="-8" id="ryR-Cb-ime"/>
                                             <constraint firstItem="qF3-6V-flq" firstAttribute="top" secondItem="slS-Bk-yiM" secondAttribute="topMargin" constant="-8" id="sQP-nZ-wuJ"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="qF3-6V-flq"/>
+                                                <exclude reference="v8L-Cn-ILJ"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <exclude reference="EPH-dl-ZVf"/>
                                                 <exclude reference="ntv-YH-pvv"/>
                                                 <exclude reference="ryR-Cb-ime"/>
                                                 <exclude reference="sQP-nZ-wuJ"/>
+                                                <exclude reference="1HI-9n-oer"/>
+                                                <exclude reference="P1W-sl-xkK"/>
+                                                <exclude reference="Pd3-wO-eda"/>
+                                                <exclude reference="rs6-gZ-P77"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
                                             <mask key="subviews">
                                                 <include reference="qF3-6V-flq"/>
+                                                <include reference="v8L-Cn-ILJ"/>
                                             </mask>
                                             <mask key="constraints">
                                                 <include reference="EPH-dl-ZVf"/>
                                                 <include reference="ntv-YH-pvv"/>
                                                 <include reference="ryR-Cb-ime"/>
                                                 <include reference="sQP-nZ-wuJ"/>
+                                                <include reference="1HI-9n-oer"/>
+                                                <include reference="P1W-sl-xkK"/>
+                                                <include reference="Pd3-wO-eda"/>
+                                                <include reference="rs6-gZ-P77"/>
                                             </mask>
                                         </variation>
                                         <connections>
                                             <outlet property="imageView" destination="qF3-6V-flq" id="Auf-1W-1wj"/>
+                                            <outlet property="loadBusy" destination="v8L-Cn-ILJ" id="Tw1-T9-3li"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

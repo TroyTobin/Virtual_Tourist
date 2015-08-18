@@ -69,6 +69,10 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     }
     
     if (goToFlickr) {
+      
+      dispatch_async(dispatch_get_main_queue(), {
+        self.CollectionView.reloadData()
+      })
       /// Get photos from Flickr
       VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
         if let errorString = errorString {
@@ -117,15 +121,15 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                         photoAtPin.pin = self.focusPin
                         
                         self.displayPhotos.append(photoAtPin)
+                        dispatch_async(dispatch_get_main_queue(), {
+                          // Since we have all the photos also reload the Collection View
+                          self.CollectionView.reloadData()
+                        })
                       }
                       
                       // Downloaded all of the photos we need so okay to save now
                       CoreDataStackManager.sharedInstance().saveContext()
-                      
-                      dispatch_async(dispatch_get_main_queue(), {
-                         // Since we have all the photos also reload the Collection View
-                         self.CollectionView.reloadData()
-                      })
+              
                     } else {
                       println("Cant find key 'photo' in \(photosDictionary)")
                     }
@@ -155,7 +159,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   /// :param: collectionView The collection view controller
   /// :param: section The index into the collection view
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return self.displayPhotos.count
+    return 21
   }
   
   /// Return the Photo for the desired index
@@ -165,10 +169,18 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let photoCell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoViewCell
     
-    let newPhoto = self.displayPhotos[indexPath.row]
+    if (self.displayPhotos.count > indexPath.row) {
+      let newPhoto = self.displayPhotos[indexPath.row]
     
-    /// Set the meme label and image
-    photoCell.imageView?.image = UIImage(data: newPhoto.image)
+      /// Set the meme label and image
+      photoCell.imageView?.image = UIImage(data: newPhoto.image)
+      photoCell.imageView?.hidden = false
+      photoCell.loadBusy?.hidden = true
+    } else {
+      photoCell.imageView?.hidden = true
+      photoCell.loadBusy?.hidden = false
+      
+    }
     
     return photoCell
   }
