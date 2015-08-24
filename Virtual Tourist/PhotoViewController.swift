@@ -172,14 +172,15 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     if (self.displayPhotos.count > indexPath.row) {
       let newPhoto = self.displayPhotos[indexPath.row]
     
-      /// Set the meme label and image
+      /// Set the photo
       photoCell.imageView?.image = UIImage(data: newPhoto.image)
       photoCell.imageView?.hidden = false
       photoCell.loadBusy?.hidden = true
+      photoCell.layer.cornerRadius = 1
     } else {
       photoCell.imageView?.hidden = true
       photoCell.loadBusy?.hidden = false
-      
+      photoCell.layer.cornerRadius = 6
     }
     
     return photoCell
