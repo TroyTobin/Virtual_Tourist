@@ -21,34 +21,66 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="6ut-JT-Unv">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </mapView>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DAO-PB-qYC">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="5Ki-zo-mfm"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Virtual Tourist" id="TLw-zy-zOq">
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="F9G-r4-hZ7"/>
+                                    </navigationItem>
+                                </items>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="5Ki-zo-mfm"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="5Ki-zo-mfm"/>
+                                    </mask>
+                                </variation>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6ut-JT-Unv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="3bv-jQ-oVO"/>
                             <constraint firstItem="6ut-JT-Unv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="Cv3-Fq-vSh"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="6ut-JT-Unv" secondAttribute="bottom" id="K2O-E2-oVp"/>
+                            <constraint firstItem="DAO-PB-qYC" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="eTP-tg-cRt"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6ut-JT-Unv" secondAttribute="trailing" constant="-16" id="enr-8l-jY0"/>
+                            <constraint firstItem="DAO-PB-qYC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="hMa-tb-xZe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="DAO-PB-qYC" secondAttribute="trailing" constant="-16" id="pIr-1d-Jme"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="6ut-JT-Unv"/>
+                                <exclude reference="DAO-PB-qYC"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="K2O-E2-oVp"/>
                                 <exclude reference="3bv-jQ-oVO"/>
                                 <exclude reference="Cv3-Fq-vSh"/>
                                 <exclude reference="enr-8l-jY0"/>
+                                <exclude reference="eTP-tg-cRt"/>
+                                <exclude reference="hMa-tb-xZe"/>
+                                <exclude reference="pIr-1d-Jme"/>
+                                <exclude reference="K2O-E2-oVp"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="6ut-JT-Unv"/>
+                                <include reference="DAO-PB-qYC"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="K2O-E2-oVp"/>
                                 <include reference="3bv-jQ-oVO"/>
                                 <include reference="Cv3-Fq-vSh"/>
                                 <include reference="enr-8l-jY0"/>
+                                <include reference="eTP-tg-cRt"/>
+                                <include reference="hMa-tb-xZe"/>
+                                <include reference="pIr-1d-Jme"/>
+                                <include reference="K2O-E2-oVp"/>
                             </mask>
                         </variation>
                     </view>
@@ -272,16 +304,10 @@
                                             <subviews>
                                                 <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qF3-6V-flq">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="120" height="122"/>
-                                                    </variation>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="v8L-Cn-ILJ">
                                                     <rect key="frame" x="-10" y="-10" width="20" height="20"/>
                                                     <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <variation key="widthClass=compact" misplaced="YES">
-                                                        <rect key="frame" x="40" y="40" width="40" height="42"/>
-                                                    </variation>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -303,14 +329,14 @@
                                                 <exclude reference="v8L-Cn-ILJ"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="EPH-dl-ZVf"/>
-                                                <exclude reference="ntv-YH-pvv"/>
-                                                <exclude reference="ryR-Cb-ime"/>
-                                                <exclude reference="sQP-nZ-wuJ"/>
                                                 <exclude reference="1HI-9n-oer"/>
                                                 <exclude reference="P1W-sl-xkK"/>
                                                 <exclude reference="Pd3-wO-eda"/>
                                                 <exclude reference="rs6-gZ-P77"/>
+                                                <exclude reference="EPH-dl-ZVf"/>
+                                                <exclude reference="ntv-YH-pvv"/>
+                                                <exclude reference="ryR-Cb-ime"/>
+                                                <exclude reference="sQP-nZ-wuJ"/>
                                             </mask>
                                         </variation>
                                         <variation key="widthClass=compact">
@@ -319,14 +345,14 @@
                                                 <include reference="v8L-Cn-ILJ"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <include reference="EPH-dl-ZVf"/>
-                                                <include reference="ntv-YH-pvv"/>
-                                                <include reference="ryR-Cb-ime"/>
-                                                <include reference="sQP-nZ-wuJ"/>
                                                 <include reference="1HI-9n-oer"/>
                                                 <include reference="P1W-sl-xkK"/>
                                                 <include reference="Pd3-wO-eda"/>
                                                 <include reference="rs6-gZ-P77"/>
+                                                <include reference="EPH-dl-ZVf"/>
+                                                <include reference="ntv-YH-pvv"/>
+                                                <include reference="ryR-Cb-ime"/>
+                                                <include reference="sQP-nZ-wuJ"/>
                                             </mask>
                                         </variation>
                                         <connections>
