@@ -42,14 +42,6 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    // Add a tap recogniser for the map view
-    // This is where new pins will be added
-    tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
-    pressRecognizer = UILongPressGestureRecognizer(target: self, action: "handlePress:")
-    pressRecognizer?.minimumPressDuration = 0.5
-    
-    tapRecognizer?.numberOfTapsRequired = 1
-    addKeyboardDismissRecognizer()
     
     /// This class is the Mapview delegate
     self.MapView.delegate = self
@@ -69,6 +61,20 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
         addPinToMap(newPin)
       }
     }
+  }
+  
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    // Add a tap recogniser for the map view
+    // This is where new pins will be added
+    tapRecognizer = UITapGestureRecognizer(target: self, action: "handleSingleTap:")
+    pressRecognizer = UILongPressGestureRecognizer(target: self, action: "handlePress:")
+    pressRecognizer?.minimumPressDuration = 0.5
+    
+    tapRecognizer?.numberOfTapsRequired = 1
+    addKeyboardDismissRecognizer()
+    
   }
   
   override func viewWillDisappear(animated: Bool) {

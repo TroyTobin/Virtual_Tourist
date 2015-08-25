@@ -43,4 +43,8 @@ class PhotoMapViewController: UIViewController {
     }
   }
   
+  @IBAction func dismissView(sender: AnyObject) {
+    self.dismissViewControllerAnimated(true, completion: nil)
+  }
+  
 }
