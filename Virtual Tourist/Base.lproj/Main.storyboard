@@ -28,7 +28,11 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Virtual Tourist" id="TLw-zy-zOq">
-                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="F9G-r4-hZ7"/>
+                                        <barButtonItem key="rightBarButtonItem" title="Edit" id="F9G-r4-hZ7">
+                                            <connections>
+                                                <action selector="editDoneToggle:" destination="BYZ-38-t0r" id="kxL-SP-cqb"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                                 <variation key="default">
@@ -42,12 +46,40 @@
                                     </mask>
                                 </variation>
                             </navigationBar>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iJw-CQ-LV7">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="hd9-7d-AKz"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="0vA-wa-JFn"/>
+                                    <barButtonItem title="Tap Pins to Delete" id="bw9-Ce-xSU"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="TcN-ee-UH1"/>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="hd9-7d-AKz"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact" misplaced="YES">
+                                    <rect key="frame" x="0.0" y="556" width="400" height="44"/>
+                                    <mask key="constraints">
+                                        <include reference="hd9-7d-AKz"/>
+                                    </mask>
+                                </variation>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="6ut-JT-Unv" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="3bv-jQ-oVO"/>
                             <constraint firstItem="6ut-JT-Unv" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="Cv3-Fq-vSh"/>
+                            <constraint firstItem="iJw-CQ-LV7" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="GKP-qQ-3zs"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="iJw-CQ-LV7" secondAttribute="bottom" constant="-44" id="H9Z-Xs-ZAd"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="6ut-JT-Unv" secondAttribute="bottom" id="K2O-E2-oVp"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="iJw-CQ-LV7" secondAttribute="trailing" constant="-16" id="RB6-Kx-Qku"/>
                             <constraint firstItem="DAO-PB-qYC" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="eTP-tg-cRt"/>
                             <constraint firstAttribute="trailingMargin" secondItem="6ut-JT-Unv" secondAttribute="trailing" constant="-16" id="enr-8l-jY0"/>
                             <constraint firstItem="DAO-PB-qYC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="hMa-tb-xZe"/>
@@ -57,6 +89,7 @@
                             <mask key="subviews">
                                 <exclude reference="6ut-JT-Unv"/>
                                 <exclude reference="DAO-PB-qYC"/>
+                                <exclude reference="iJw-CQ-LV7"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="3bv-jQ-oVO"/>
@@ -65,6 +98,9 @@
                                 <exclude reference="eTP-tg-cRt"/>
                                 <exclude reference="hMa-tb-xZe"/>
                                 <exclude reference="pIr-1d-Jme"/>
+                                <exclude reference="GKP-qQ-3zs"/>
+                                <exclude reference="RB6-Kx-Qku"/>
+                                <exclude reference="H9Z-Xs-ZAd"/>
                                 <exclude reference="K2O-E2-oVp"/>
                             </mask>
                         </variation>
@@ -72,6 +108,7 @@
                             <mask key="subviews">
                                 <include reference="6ut-JT-Unv"/>
                                 <include reference="DAO-PB-qYC"/>
+                                <include reference="iJw-CQ-LV7"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="3bv-jQ-oVO"/>
@@ -80,12 +117,17 @@
                                 <include reference="eTP-tg-cRt"/>
                                 <include reference="hMa-tb-xZe"/>
                                 <include reference="pIr-1d-Jme"/>
+                                <include reference="GKP-qQ-3zs"/>
+                                <include reference="RB6-Kx-Qku"/>
+                                <include reference="H9Z-Xs-ZAd"/>
                                 <include reference="K2O-E2-oVp"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
                         <outlet property="MapView" destination="6ut-JT-Unv" id="VH0-pK-hqU"/>
+                        <outlet property="editDoneButton" destination="F9G-r4-hZ7" id="2HA-QI-Bcs"/>
+                        <outlet property="instructionBar" destination="iJw-CQ-LV7" id="44B-wI-Bmm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

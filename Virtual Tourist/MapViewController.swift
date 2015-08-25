@@ -13,6 +13,8 @@ import CoreData
 class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, MKMapViewDelegate {
   
   @IBOutlet weak var MapView: MKMapView!
+  @IBOutlet weak var editDoneButton: UIBarButtonItem!
+  @IBOutlet weak var instructionBar: UIToolbar!
   var tapRecognizer: UITapGestureRecognizer?
   var pressRecognizer: UILongPressGestureRecognizer?
   
@@ -207,5 +209,19 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
     /// Add the newly create pin to the map
     checkAddPinToMap(locationPressed.latitude, longitude: locationPressed.longitude)
   }
+  
+  @IBAction func editDoneToggle(sender: AnyObject) {
+    var instructionBarHeight = instructionBar.frame.height
+    if (editDoneButton.title == "Edit") {
+      editDoneButton.title = "Done"
+      instructionBar.frame.origin.y -= instructionBarHeight
+      MapView.frame.origin.y -= instructionBarHeight
+    } else {
+      editDoneButton.title = "Edit"
+      instructionBar.frame.origin.y += instructionBarHeight
+      MapView.frame.origin.y += instructionBarHeight
+    }
+  }
+  
 }
 
