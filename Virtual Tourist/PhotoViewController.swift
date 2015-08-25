@@ -39,6 +39,9 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
     
+    /// Student information downloaded so need to refresh the view
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshPhotoAlbum:", name: "refreshPhotoAlbum",object: nil)
+    
     displayPhotos.removeAll(keepCapacity: false)
     
     /// This class is the FetchedResultsController delegate
@@ -69,89 +72,110 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     }
     
     if (goToFlickr) {
-      
-      dispatch_async(dispatch_get_main_queue(), {
-        self.CollectionView.reloadData()
-      })
-      /// Get photos from Flickr
-      VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
-        if let errorString = errorString {
-          println("Error = \(errorString)")
-        } else {
-          if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
-            
-            if let totalPages = photosDictionary["pages"] as? Int {
-              
-              /* Flickr API - will only return up the 4000 images (100 per page * 40 page max) */
-              let pageLimit = min(totalPages, 40)
-              let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-              VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: randomPage) { results, errorString in
-                if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
-                  
-                  var totalPhotosVal = 0
-                  if let totalPhotos = photosDictionary["total"] as? String {
-                    totalPhotosVal = (totalPhotos as NSString).integerValue
-                  }
-                  
-                  /// we want to display 21 photos
-                  if totalPhotosVal > 0 {
-                    if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
-                      var total = 0
-                    
-                      while (total < min(21, totalPhotosVal)) {
-                        let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
-                        let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
-                        
-                        let photoTitle = photoDictionary["title"] as? String
-                        let imageUrlString = photoDictionary["url_m"] as? String
-                        let id = photoDictionary["id"] as? String
-                        let imageURL = NSURL(string: imageUrlString!)
-                        let imageData = NSData(contentsOfURL: imageURL!)
-                        let image = UIImage(data: imageData!)
-                        println("photo \(total)= \(imageURL)")
-                        total += 1
-                        let dictionary: [String : AnyObject] = [
-                          Photo.Keys.id: id as! AnyObject,
-                          Photo.Keys.url: imageUrlString as! AnyObject,
-                          Photo.Keys.image: imageData as! AnyObject
-                        ]
-                        
-                        /// Now we create a new Photo, using the shared Context
-                        let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
-                        photoAtPin.pin = self.focusPin
-                        
-                        self.displayPhotos.append(photoAtPin)
-                        dispatch_async(dispatch_get_main_queue(), {
-                          // Since we have all the photos also reload the Collection View
-                          self.CollectionView.reloadData()
-                        })
-                      }
-                      
-                      // Downloaded all of the photos we need so okay to save now
-                      CoreDataStackManager.sharedInstance().saveContext()
-              
-                    } else {
-                      println("Cant find key 'photo' in \(photosDictionary)")
-                    }
-                  } else {
-                  }
-                }
-                
-              }
-              
-            } else {
-              println("Cant find key 'pages' in \(photosDictionary)")
-            }
-          } else {
-            println("Cant find key 'photos' in \(results)")
-          }
-        }
-      }
+      loadPhotosFromFlickr()
     } else {
       dispatch_async(dispatch_get_main_queue(), {
         self.CollectionView.reloadData()
       })
     }
+  }
+  
+  func loadPhotosFromFlickr() {
+    dispatch_async(dispatch_get_main_queue(), {
+      self.CollectionView.reloadData()
+    })
+    
+    /// Get photos from Flickr
+    VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: nil) { results, errorString in
+      if let errorString = errorString {
+        println("Error = \(errorString)")
+      } else {
+        if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
+          
+          if let totalPages = photosDictionary["pages"] as? Int {
+            
+            /* Flickr API - will only return up the 4000 images (100 per page * 40 page max) */
+            let pageLimit = min(totalPages, 40)
+            let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+            VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: randomPage) { results, errorString in
+              if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
+                
+                var totalPhotosVal = 0
+                if let totalPhotos = photosDictionary["total"] as? String {
+                  totalPhotosVal = (totalPhotos as NSString).integerValue
+                }
+                
+                /// we want to display 21 photos
+                if totalPhotosVal > 0 {
+                  if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
+                    var total = 0
+                    
+                    while (total < min(21, totalPhotosVal)) {
+                      let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
+                      let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
+                      
+                      let photoTitle = photoDictionary["title"] as? String
+                      let imageUrlString = photoDictionary["url_m"] as? String
+                      let id = photoDictionary["id"] as? String
+                      let imageURL = NSURL(string: imageUrlString!)
+                      let imageData = NSData(contentsOfURL: imageURL!)
+                      let image = UIImage(data: imageData!)
+                      println("photo \(total)= \(imageURL)")
+                      total += 1
+                      let dictionary: [String : AnyObject] = [
+                        Photo.Keys.id: id as! AnyObject,
+                        Photo.Keys.url: imageUrlString as! AnyObject,
+                        Photo.Keys.image: imageData as! AnyObject
+                      ]
+                      
+                      /// Now we create a new Photo, using the shared Context
+                      let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
+                      photoAtPin.pin = self.focusPin
+                      
+                      self.displayPhotos.append(photoAtPin)
+                      dispatch_async(dispatch_get_main_queue(), {
+                        // Since we have all the photos also reload the Collection View
+                        self.CollectionView.reloadData()
+                      })
+                    }
+                    
+                    // Downloaded all of the photos we need so okay to save now
+                    CoreDataStackManager.sharedInstance().saveContext()
+                    
+                  } else {
+                    println("Cant find key 'photo' in \(photosDictionary)")
+                  }
+                } else {
+                }
+              }
+              
+            }
+            
+          } else {
+            println("Cant find key 'pages' in \(photosDictionary)")
+          }
+        } else {
+          println("Cant find key 'photos' in \(results)")
+        }
+      }
+    }
+  }
+  
+  
+  /// refresh the photo view
+  func refreshPhotoAlbum(notification: NSNotification) {
+    for photo in displayPhotos {
+      sharedContext.deleteObject(photo)
+    }
+    CoreDataStackManager.sharedInstance().saveContext()
+    
+    displayPhotos.removeAll(keepCapacity: false)
+    
+    dispatch_async(dispatch_get_main_queue(), {
+      self.CollectionView.reloadData()
+    })
+    
+    loadPhotosFromFlickr()
   }
   
   /// Return the number of saved Meme images to show
