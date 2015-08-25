@@ -289,6 +289,9 @@
                             </mask>
                         </variation>
                     </view>
+                    <connections>
+                        <outlet property="photoActionButton" destination="YML-w6-jT2" id="VXa-0F-uJS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yCa-xs-bGR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

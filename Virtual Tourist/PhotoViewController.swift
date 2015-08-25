@@ -13,6 +13,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   
   var focusPin: Pin!
   var displayPhotos = [Photo]()
+  var selectedCells: NSMutableArray = []
   @IBOutlet var CollectionView: UICollectionView!
   
   /// Managed object context
@@ -206,7 +207,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       photoCell.loadBusy?.hidden = false
       photoCell.layer.cornerRadius = 6
     }
-    
+    photoCell.tag = 0
     return photoCell
   }
   
@@ -215,6 +216,24 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   /// :param: collectionView The collection view controller
   /// :param: indexPath The index of the item selected
   func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:NSIndexPath) {
-
+    
+    var cell: PhotoViewCell? = self.CollectionView.cellForItemAtIndexPath(indexPath) as! PhotoViewCell
+    if (cell!.tag == 0) {
+      selectedCells.addObject(cell!)
+      NSNotificationCenter.defaultCenter().postNotificationName("cellSelected", object: nil)
+      cell!.tag = 1
+      cell!.layer.borderWidth = 2.0
+      cell!.layer.borderColor = UIColor.blueColor().CGColor
+      cell!.layer.opacity = 0.2
+    } else {
+      selectedCells.removeObject(cell!)
+      if (selectedCells.count == 0) {
+        NSNotificationCenter.defaultCenter().postNotificationName("cellDeSelected", object: nil)
+      }
+      cell!.tag = 0
+      cell!.layer.borderWidth = 0.0
+      cell!.layer.borderColor = UIColor.blueColor().CGColor
+      cell!.layer.opacity = 1.0
+    }
   }
 }

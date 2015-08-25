@@ -11,10 +11,17 @@ import MapKit
 
 class PhotoMapViewController: UIViewController {
 
+  @IBOutlet weak var photoActionButton: UIBarButtonItem!
   @IBOutlet weak var mapView: MKMapView!
   var focusPin: Pin!
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    /// add observer for photo cell selection
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: "cellSelected:", name: "cellSelected",object: nil)
+    /// add observer for photo cell deselecton
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: "cellDeSelected:", name: "cellDeSelected",object: nil)
+    
   }
   
   override func viewDidLayoutSubviews() {
@@ -42,6 +49,18 @@ class PhotoMapViewController: UIViewController {
         photos.focusPin = pin;
     }
   }
+  
+  /// cell selected so switch the "new collection" title to "Remove Selected Pictures"
+  func cellSelected(notification: NSNotification) {
+    photoActionButton.title = "Remove Selected Pictures"
+  }
+  
+  
+  /// cell de-selected so switch the "Remove Selected Pictures" title to "new collection"
+  func cellDeSelected(notification: NSNotification) {
+    photoActionButton.title = "New Collection"
+  }
+  
   
   @IBAction func newCollection(sender: AnyObject) {
     println("newCollection")
