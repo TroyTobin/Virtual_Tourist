@@ -110,6 +110,30 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
     })
   }
   
+  /// Remove a pin from the map.
+  /// :param:  pin The Pin to add to the map (given latitude and longitude)
+  func removePinFromMap(pin: Pin) {
+    var annotations = self.MapView.annotations
+    var foundAnnotation : MKPointAnnotation?
+    for annotation in annotations {
+      if let checkAnnotation = annotation as? MKPointAnnotation {
+        
+        if checkAnnotation.coordinate.latitude == pin.latitude && checkAnnotation.coordinate.longitude == pin.longitude {
+          foundAnnotation = annotation as! MKPointAnnotation
+          break
+        }
+      }
+    }
+    
+    if let remAnnotation = foundAnnotation {
+    
+      dispatch_async(dispatch_get_main_queue(), {
+        /// remove the annotation from the view
+        self.MapView.removeAnnotation(foundAnnotation)
+      })
+    }
+  }
+  
   /// Check if we should add a pin to the map.
   /// :param:  pin The Pin to add to the map (given latitude and longitude)
   func checkAddPinToMap(latitude: NSNumber, longitude: NSNumber) {
@@ -184,10 +208,20 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
         
       }
       
-      let controller = self.storyboard!.instantiateViewControllerWithIdentifier("PhotoMapView") as! PhotoMapViewController
-      controller.focusPin = pressedPin
-      println(pressedPin)
-      self.presentViewController(controller, animated: true, completion: nil)
+      /// If the editDone button says "Edit" we are in the "view" mode where photo albums should be loaded.
+      /// If the editDone button says "Done" we are in the "edit" mode where pins should be removed
+      if (editDoneButton.title == "Edit") {
+        let controller = self.storyboard!.instantiateViewControllerWithIdentifier("PhotoMapView") as! PhotoMapViewController
+        controller.focusPin = pressedPin
+        println(pressedPin)
+        self.presentViewController(controller, animated: true, completion: nil)
+      } else {
+        if let deletePin = pressedPin {
+          removePinFromMap(pressedPin!)
+          sharedContext.deleteObject(pressedPin!)
+          CoreDataStackManager.sharedInstance().saveContext()
+        }
+      }
     }
   }
   
