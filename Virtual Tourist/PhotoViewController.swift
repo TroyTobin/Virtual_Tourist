@@ -12,7 +12,7 @@ import CoreData
 class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
   
   var focusPin: Pin!
-  var displayPhotos = [Photo]()
+  var displayPhotos: NSMutableArray = []
   var selectedCells: NSMutableArray = []
   @IBOutlet var CollectionView: UICollectionView!
   
@@ -43,7 +43,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     /// Student information downloaded so need to refresh the view
     NSNotificationCenter.defaultCenter().addObserver(self, selector: "refreshPhotoAlbum:", name: "refreshPhotoAlbum",object: nil)
     
-    displayPhotos.removeAll(keepCapacity: false)
+    displayPhotos.removeAllObjects()
     
     /// This class is the FetchedResultsController delegate
     fetchedResultsController.delegate = self
@@ -65,7 +65,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       } else {
         for photo in photos {
           let newPhoto = photo as! Photo
-          displayPhotos.append(newPhoto)
+          displayPhotos.addObject(newPhoto)
         }
       }
     } else {
@@ -133,7 +133,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                       let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
                       photoAtPin.pin = self.focusPin
                       
-                      self.displayPhotos.append(photoAtPin)
+                      self.displayPhotos.addObject(photoAtPin)
                       dispatch_async(dispatch_get_main_queue(), {
                         // Since we have all the photos also reload the Collection View
                         self.CollectionView.reloadData()
@@ -165,18 +165,43 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   
   /// refresh the photo view
   func refreshPhotoAlbum(notification: NSNotification) {
-    for photo in displayPhotos {
-      sharedContext.deleteObject(photo)
+    // there are no photos selected so we are getting a whole new collections
+    if (selectedCells.count == 0) {
+      for photo in displayPhotos {
+        sharedContext.deleteObject(photo as! NSManagedObject)
+      }
+      CoreDataStackManager.sharedInstance().saveContext()
+    
+      displayPhotos.removeAllObjects()
+    
+      dispatch_async(dispatch_get_main_queue(), {
+        self.CollectionView.reloadData()
+      })
+    
+      loadPhotosFromFlickr()
+    } else {
+      // there are selected cells so we are removing select cells.
+      /// Find the label (it containes the url)
+      var removedPhotos = [Photo]()
+      for cellIndex in selectedCells {
+        println("index to go \(cellIndex)")
+        var photo : Photo = displayPhotos.objectAtIndex(cellIndex as! Int) as! Photo
+        removedPhotos.append(photo)
+      }
+      for photo in removedPhotos {
+        displayPhotos.removeObject(photo)
+        sharedContext.deleteObject(photo as! NSManagedObject)
+      }
+      
+      CoreDataStackManager.sharedInstance().saveContext()
+      selectedCells.removeAllObjects()
+      dispatch_async(dispatch_get_main_queue(), {
+        self.CollectionView.reloadData()
+      })
+      
+      NSNotificationCenter.defaultCenter().postNotificationName("cellDeSelected", object: nil)
+      
     }
-    CoreDataStackManager.sharedInstance().saveContext()
-    
-    displayPhotos.removeAll(keepCapacity: false)
-    
-    dispatch_async(dispatch_get_main_queue(), {
-      self.CollectionView.reloadData()
-    })
-    
-    loadPhotosFromFlickr()
   }
   
   /// Return the number of saved Meme images to show
@@ -193,21 +218,38 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   /// :param: indexPath The index of the item in the collection view
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let photoCell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath) as! PhotoViewCell
-    
+
     if (self.displayPhotos.count > indexPath.row) {
-      let newPhoto = self.displayPhotos[indexPath.row]
+      let newPhoto = self.displayPhotos.objectAtIndex(indexPath.row) as! Photo
     
       /// Set the photo
       photoCell.imageView?.image = UIImage(data: newPhoto.image)
+      /// add the id to the image (invisible) so we can retrieve it later
+      var photoLabel = UILabel()
+      photoLabel.text = newPhoto.id
+      photoLabel.backgroundColor = UIColor.clearColor()
+      photoLabel.textColor =  UIColor.clearColor()
+      
+      photoCell.imageView?.addSubview(photoLabel)
       photoCell.imageView?.hidden = false
       photoCell.loadBusy?.hidden = true
       photoCell.layer.cornerRadius = 1
+      if ( selectedCells.containsObject(indexPath.row) ) {
+        photoCell.imageView.layer.borderWidth = 2.0
+        photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
+        photoCell.imageView.layer.opacity = 0.2
+      } else {
+        photoCell.imageView.tag = 0
+        photoCell.imageView.layer.borderWidth = 0.0
+        photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
+        photoCell.imageView.layer.opacity = 1.0
+      }
     } else {
       photoCell.imageView?.hidden = true
       photoCell.loadBusy?.hidden = false
       photoCell.layer.cornerRadius = 6
     }
-    photoCell.tag = 0
+    photoCell.imageView.tag = 0
     return photoCell
   }
   
@@ -218,22 +260,23 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
   func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath:NSIndexPath) {
     
     var cell: PhotoViewCell? = self.CollectionView.cellForItemAtIndexPath(indexPath) as! PhotoViewCell
-    if (cell!.tag == 0) {
-      selectedCells.addObject(cell!)
-      NSNotificationCenter.defaultCenter().postNotificationName("cellSelected", object: nil)
-      cell!.tag = 1
-      cell!.layer.borderWidth = 2.0
-      cell!.layer.borderColor = UIColor.blueColor().CGColor
-      cell!.layer.opacity = 0.2
-    } else {
-      selectedCells.removeObject(cell!)
+    if (selectedCells.containsObject(indexPath.row)) {
+      selectedCells.removeObject(indexPath.row)
       if (selectedCells.count == 0) {
         NSNotificationCenter.defaultCenter().postNotificationName("cellDeSelected", object: nil)
       }
-      cell!.tag = 0
-      cell!.layer.borderWidth = 0.0
-      cell!.layer.borderColor = UIColor.blueColor().CGColor
-      cell!.layer.opacity = 1.0
+      cell!.imageView.tag = 0
+      cell!.imageView.layer.borderWidth = 0.0
+      cell!.imageView.layer.borderColor = UIColor.blueColor().CGColor
+      cell!.imageView.layer.opacity = 1.0
+    } else {
+      
+      selectedCells.addObject(indexPath.row)
+      NSNotificationCenter.defaultCenter().postNotificationName("cellSelected", object: nil)
+      cell!.imageView.tag = 1
+      cell!.imageView.layer.borderWidth = 2.0
+      cell!.imageView.layer.borderColor = UIColor.blueColor().CGColor
+      cell!.imageView.layer.opacity = 0.2
     }
   }
 }
