@@ -167,6 +167,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     // there are no photos selected so we are getting a whole new collections
     if (selectedCells.count == 0) {
       for photo in displayPhotos {
+        (photo as? Photo)!.delete()
         sharedContext.deleteObject(photo as! NSManagedObject)
       }
       CoreDataStackManager.sharedInstance().saveContext()
@@ -189,7 +190,9 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       }
       for photo in removedPhotos {
         displayPhotos.removeObject(photo)
+        photo.delete()
         sharedContext.deleteObject(photo as! NSManagedObject)
+        
       }
       
       CoreDataStackManager.sharedInstance().saveContext()

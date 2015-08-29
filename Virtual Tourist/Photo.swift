@@ -54,6 +54,14 @@ class Photo : NSManagedObject {
     })
   }
   
+  /// Delete the image from the documents directory
+  func delete() {
+    /// First check that the file exits
+    var fileManager = NSFileManager.defaultManager()
+    if (fileManager.fileExistsAtPath(path)) {
+      fileManager.removeItemAtPath(path, error: nil)
+    }
+  }
   
   /// Return the Image for this photo - or nil if it doesn't exist
   func image() -> UIImage? {
