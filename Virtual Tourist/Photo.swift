@@ -32,7 +32,6 @@ class Photo : NSManagedObject {
   /// Initialise the photo with a dictionary
   init(dictionary: [String : AnyObject], image: NSData, context: NSManagedObjectContext) {
     
-    
     // Get the entity associated with the Photo type
     let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
     
@@ -42,19 +41,24 @@ class Photo : NSManagedObject {
     // Set the photos attributes
     id   = dictionary[Keys.id]  as! String
     url  = dictionary[Keys.url]  as! String
-    let documentsDirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString
-    // Create the fileName
-    path = "\(documentsDirPath)/\(id).png"
-    println(path)
     
+    // get the path to the documents directory for this application
+    let documentsDirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString
+    
+    // Create the image file name for storage on teh file system
+    path = "\(documentsDirPath)/\(id).png"
+    
+    // Save the image to file
     dispatch_async(dispatch_get_main_queue(), {
      println(UIImagePNGRepresentation(UIImage(data: image)).writeToFile(self.path, atomically: true))
     })
   }
   
+  
+  /// Return the Image for this photo - or nil if it doesn't exist
   func image() -> UIImage? {
+    // first check if the file exists at the designated path
     var fileManager = NSFileManager.defaultManager()
-    //println(path)
     if (fileManager.fileExistsAtPath(path)) {
       return UIImage(contentsOfFile: path)!
     }
