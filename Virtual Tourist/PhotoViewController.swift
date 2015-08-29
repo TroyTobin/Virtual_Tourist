@@ -95,34 +95,35 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
           
           if let totalPages = photosDictionary["pages"] as? Int {
             
-            /* Flickr API - will only return up the 4000 images (100 per page * 40 page max) */
+            /// Get a random page of photos to then get our random photos from
             let pageLimit = min(totalPages, 40)
             let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+            
             VTClient.sharedInstance().searchPhotosByLocation(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, page: randomPage) { results, errorString in
-              if let photosDictionary = results!.valueForKey("photos") as? [String:AnyObject] {
+              if let photosList = results!.valueForKey("photos") as? [String:AnyObject] {
                 
+                /// determine how many photos where retrieved from Flickr
                 var totalPhotosVal = 0
-                if let totalPhotos = photosDictionary["total"] as? String {
+                if let totalPhotos = photosList["total"] as? String {
                   totalPhotosVal = (totalPhotos as NSString).integerValue
                 }
                 
                 /// we want to display 21 photos
-                if totalPhotosVal > 0 {
-                  if let photosArray = photosDictionary["photo"] as? [[String: AnyObject]] {
-                    var total = 0
-                    
-                    while (total < min(21, totalPhotosVal)) {
+                if (totalPhotosVal > 0) {
+                  if let photosArray = photosList["photo"] as? [[String: AnyObject]] {
+                    var i = 0
+                    for (; i < min(21, totalPhotosVal); i++) {
+                      /// Get a random photo
                       let randomPhotoIndex = Int(arc4random_uniform(UInt32(photosArray.count)))
-                      let photoDictionary = photosArray[randomPhotoIndex] as [String: AnyObject]
+                      let photoInformation = photosArray[randomPhotoIndex]
                       
-                      let photoTitle = photoDictionary["title"] as? String
-                      let imageUrlString = photoDictionary["url_m"] as? String
-                      let id = photoDictionary["id"] as? String
+                      /// Get the photo information to store
+                      let imageUrlString = photoInformation["url_m"] as? String
+                      let id = photoInformation["id"] as? String
                       let imageURL = NSURL(string: imageUrlString!)
                       let imageData = NSData(contentsOfURL: imageURL!)
-                      let image = UIImage(data: imageData!)
-                      println("photo \(total)= \(imageURL)")
-                      total += 1
+                      
+                      /// Set the photo dictionary to use in the contructor
                       let dictionary: [String : AnyObject] = [
                         Photo.Keys.id: id as! AnyObject,
                         Photo.Keys.url: imageUrlString as! AnyObject
@@ -133,6 +134,7 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                       photoAtPin.pin = self.focusPin
                       
                       self.displayPhotos.addObject(photoAtPin)
+                      
                       dispatch_async(dispatch_get_main_queue(), {
                         // Since we have all the photos also reload the Collection View
                         self.CollectionView.reloadData()
@@ -184,7 +186,6 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       /// Find the label (it containes the url)
       var removedPhotos = [Photo]()
       for cellIndex in selectedCells {
-        println("index to go \(cellIndex)")
         var photo : Photo = displayPhotos.objectAtIndex(cellIndex as! Int) as! Photo
         removedPhotos.append(photo)
       }
