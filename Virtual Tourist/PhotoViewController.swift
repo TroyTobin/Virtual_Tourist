@@ -125,12 +125,11 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
                       total += 1
                       let dictionary: [String : AnyObject] = [
                         Photo.Keys.id: id as! AnyObject,
-                        Photo.Keys.url: imageUrlString as! AnyObject,
-                        Photo.Keys.image: imageData as! AnyObject
+                        Photo.Keys.url: imageUrlString as! AnyObject
                       ]
                       
                       /// Now we create a new Photo, using the shared Context
-                      let photoAtPin = Photo(dictionary: dictionary, context: self.sharedContext)
+                      let photoAtPin = Photo(dictionary: dictionary, image: imageData!, context: self.sharedContext)
                       photoAtPin.pin = self.focusPin
                       
                       self.displayPhotos.addObject(photoAtPin)
@@ -223,26 +222,30 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
       let newPhoto = self.displayPhotos.objectAtIndex(indexPath.row) as! Photo
     
       /// Set the photo
-      photoCell.imageView?.image = UIImage(data: newPhoto.image)
-      /// add the id to the image (invisible) so we can retrieve it later
-      var photoLabel = UILabel()
-      photoLabel.text = newPhoto.id
-      photoLabel.backgroundColor = UIColor.clearColor()
-      photoLabel.textColor =  UIColor.clearColor()
+      // Need to retrieve it from the file system
+      if let newImage = newPhoto.image() {
+
+        photoCell.imageView?.image = newImage
+        /// add the id to the image (invisible) so we can retrieve it later
+        var photoLabel = UILabel()
+        photoLabel.text = newPhoto.id
+        photoLabel.backgroundColor = UIColor.clearColor()
+        photoLabel.textColor =  UIColor.clearColor()
       
-      photoCell.imageView?.addSubview(photoLabel)
-      photoCell.imageView?.hidden = false
-      photoCell.loadBusy?.hidden = true
-      photoCell.layer.cornerRadius = 1
-      if ( selectedCells.containsObject(indexPath.row) ) {
-        photoCell.imageView.layer.borderWidth = 2.0
-        photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
-        photoCell.imageView.layer.opacity = 0.2
-      } else {
-        photoCell.imageView.tag = 0
-        photoCell.imageView.layer.borderWidth = 0.0
-        photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
-        photoCell.imageView.layer.opacity = 1.0
+        photoCell.imageView?.addSubview(photoLabel)
+        photoCell.imageView?.hidden = false
+        photoCell.loadBusy?.hidden = true
+        photoCell.layer.cornerRadius = 1
+        if ( selectedCells.containsObject(indexPath.row) ) {
+          photoCell.imageView.layer.borderWidth = 2.0
+          photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
+          photoCell.imageView.layer.opacity = 0.2
+        } else {
+          photoCell.imageView.tag = 0
+          photoCell.imageView.layer.borderWidth = 0.0
+          photoCell.imageView.layer.borderColor = UIColor.blueColor().CGColor
+          photoCell.imageView.layer.opacity = 1.0
+        }
       }
     } else {
       photoCell.imageView?.hidden = true

@@ -15,13 +15,12 @@ class Photo : NSManagedObject {
   struct Keys {
     static let id   = "id"
     static let url  = "url"
-    static let image = "image"
   }
   
   ///Set the Photo attributes to Core data attributes
   @NSManaged var id:  String
   @NSManaged var url:  String
-  @NSManaged var image: NSData
+  @NSManaged var path: String
   @NSManaged var pin:  Pin
   
   /// initialise the Core data
@@ -31,7 +30,7 @@ class Photo : NSManagedObject {
   
   
   /// Initialise the photo with a dictionary
-  init(dictionary: [String : AnyObject], context: NSManagedObjectContext) {
+  init(dictionary: [String : AnyObject], image: NSData, context: NSManagedObjectContext) {
     
     
     // Get the entity associated with the Photo type
@@ -43,7 +42,23 @@ class Photo : NSManagedObject {
     // Set the photos attributes
     id   = dictionary[Keys.id]  as! String
     url  = dictionary[Keys.url]  as! String
-    image = dictionary[Keys.image] as! NSData
+    let documentsDirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! NSString
+    // Create the fileName
+    path = "\(documentsDirPath)/\(id).png"
+    println(path)
+    
+    dispatch_async(dispatch_get_main_queue(), {
+     println(UIImagePNGRepresentation(UIImage(data: image)).writeToFile(self.path, atomically: true))
+    })
+  }
+  
+  func image() -> UIImage? {
+    var fileManager = NSFileManager.defaultManager()
+    //println(path)
+    if (fileManager.fileExistsAtPath(path)) {
+      return UIImage(contentsOfFile: path)!
+    }
+    return nil
   }
 }
 
