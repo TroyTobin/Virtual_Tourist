@@ -63,7 +63,6 @@ class PhotoMapViewController: UIViewController {
   
   
   @IBAction func newCollection(sender: AnyObject) {
-    println("newCollection")
     
     /// notify the photo view to reload the photos
     NSNotificationCenter.defaultCenter().postNotificationName("refreshPhotoAlbum", object: nil)

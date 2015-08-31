@@ -50,7 +50,7 @@ class Photo : NSManagedObject {
     
     // Save the image to file
     dispatch_async(dispatch_get_main_queue(), {
-     println(UIImagePNGRepresentation(UIImage(data: image)).writeToFile(self.path, atomically: true))
+     UIImagePNGRepresentation(UIImage(data: image)).writeToFile(self.path, atomically: true)
     })
   }
   

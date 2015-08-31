@@ -93,8 +93,6 @@ class PhotoViewController: UIViewController, NSFetchedResultsControllerDelegate,
     var photoFetches = 0
     while (photoFetches++ < MAX_PHOTOS_IN_ALBUM) {
       VTClient.sharedInstance().getNewPhoto(self.focusPin.latitude as Double, longitude: self.focusPin.longitude as Double, photos: self.displayPhotos) { photoData, errorString in
-        println(errorString)
-        println(photoData)
         if let errorString = errorString {
           // No photo returned
           println("Failed to retrieve photo - \(errorString)")

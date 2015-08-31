@@ -219,7 +219,6 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
       if (editDoneButton.title == "Edit") {
         let controller = self.storyboard!.instantiateViewControllerWithIdentifier("PhotoMapView") as! PhotoMapViewController
         controller.focusPin = pressedPin
-        println(pressedPin)
         self.presentViewController(controller, animated: true, completion: nil)
       } else {
         if let deletePin = pressedPin {
