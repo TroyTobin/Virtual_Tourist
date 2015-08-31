@@ -207,7 +207,7 @@ class MapViewController: UIViewController, NSFetchedResultsControllerDelegate, M
         
         for pin in pins {
           if (pin.latitude == pinLatitude && pin.longitude == pinLongitude) {
-            pressedPin = pin as! Pin
+            pressedPin = pin as? Pin
             break;
           }
         }
